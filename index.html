@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+    <title>DESERT SKYBOX</title>
+</head>
+<body>
+    <script src="three.min.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+        //SCENE
+        const scene = new THREE.Scene();
+
+        //CAMERA
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 30000);
+        camera.position.set(-900,-200,-900);
+
+        //RENDERER
+        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        //ORBIT CONTROLS
+        let orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+        orbitControls.addEventListener('change', renderer.domElement);
+
+        //TEXTURES
+        let materials = [];
+        const desertdawn_ft = new THREE.TextureLoader().load('desertdawn_ft.jpg');
+        const desertdawn_bk = new THREE.TextureLoader().load('desertdawn_bk.jpg');
+        const desertdawn_up = new THREE.TextureLoader().load('desertdawn_up.jpg');
+        const desertdawn_dn = new THREE.TextureLoader().load('desertdawn_dn.jpg');
+        const desertdawn_rt = new THREE.TextureLoader().load('desertdawn_rt.jpg');
+        const desertdawn_lf = new THREE.TextureLoader().load('desertdawn_lf.jpg');
+
+        materials.push(new THREE.MeshBasicMaterial({map: desertdawn_ft}));
+        materials.push(new THREE.MeshBasicMaterial({map: desertdawn_bk}));
+        materials.push(new THREE.MeshBasicMaterial({map: desertdawn_up}));
+        materials.push(new THREE.MeshBasicMaterial({map: desertdawn_dn}));
+        materials.push(new THREE.MeshBasicMaterial({map: desertdawn_rt}));
+        materials.push(new THREE.MeshBasicMaterial({map: desertdawn_lf}));
+
+        materials.map(material => {material.side = THREE.BackSide;});
+
+        //BOX
+        const skyBoxGeometry = new THREE.BoxGeometry(10000, 10000, 10000);
+        const skyBox = new THREE.Mesh(skyBoxGeometry, materials);
+        scene.add(skyBox);
+
+        animate();
+
+        function animate() {
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        </script>
+</body>
+</html>
